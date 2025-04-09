@@ -12,8 +12,22 @@ import javax.swing.JButton;
  * @author Admin
  */
 public class CustomButton extends JButton {
+    public static Dimension defaultSize = new Dimension(140, 80);
+    
     public CustomButton(String text){
         super(text);
-        setPreferredSize(new Dimension(100,40));
+        setPreferredSize(defaultSize);
+    }
+    
+    public CustomButton(String text, double scale){
+        super(text);
+        setPreferredSize(scaleDefault(scale));
+    }
+    
+    public static Dimension scaleDefault(double scale){
+        return new Dimension(
+                (int)(defaultSize.width*scale),
+                (int)(defaultSize.height*scale)
+        );
     }
 }
