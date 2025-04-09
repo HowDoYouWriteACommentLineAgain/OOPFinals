@@ -4,12 +4,10 @@
  */
 package oopfinals;
 
+import oopfinals.components.LoginFrame;
+import oopfinals.components.CustomFrame;
 import oopfinals.components.ButtonPanel;
-import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -21,21 +19,37 @@ public class OOPFinals {
      * @param args the command line arguments
      */
     
-    static ImageIcon icon = new ImageIcon(OOPFinals.class.getResource("/resources/Icon.png"));
+    private static ImageIcon icon = new ImageIcon(OOPFinals.class.getResource("/resources/Icon.png"));
+    
+    private static final CustomFrame landingFrame = new CustomFrame("Welcome");
+    private static final LoginFrame loginFrame = new LoginFrame("Login", landingFrame);
     
     public static void main(String[] args) {
-        JFrame landingFrame = new CustomFrame("Welcome");
-        JFrame loginFrame = new LoginFrame("Login", landingFrame);
 
+        ButtonPanel crudMenu = new ButtonPanel("Add Event", "View Events", "Update Event", "Delete Event", "Go Back");
         
-        JPanel buttonPanel = new ButtonPanel("Add Event", "View Events", "Update Event", "Delete Event");
-        JLabel imageHolder = new JLabel(ImageUtils.rescale(icon, 100, 100));
+        landingFrame.addCenterImage(ImageUtils.rescale(icon, 100, 100));
+        landingFrame.addSouth(crudMenu);
         
-        landingFrame.add(imageHolder, BorderLayout.CENTER);
-        landingFrame.add(buttonPanel, BorderLayout.SOUTH);
+        loginFrame.setVisible(true); //initial frame that is set be visible
         
-        loginFrame.setVisible(true);
         landingFrame.setVisible(false);
+        
+        //TODO ADD MORE FRAMES
+        
+        //CREATE
+        //READ
+        //UPDATE
+        //DELETE
+        
+        //JDBC CONNECTION
+        //TABLE
+        
+        
+        crudMenu.getButtonByName("Go Back").addActionListener(e->{
+            loginFrame.setVisible(true);
+            landingFrame.setVisible(false);
+        });
     }
     
     

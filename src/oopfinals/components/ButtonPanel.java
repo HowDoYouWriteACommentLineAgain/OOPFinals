@@ -4,11 +4,9 @@
  */
 package oopfinals.components;
 
-import java.awt.Color;
+
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,20 +17,33 @@ import javax.swing.JPanel;
  */
 public class ButtonPanel extends JPanel{
     public ButtonPanel(String... names){
-//        setBackground(new Color(160, 160, 160));
-            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             
         for(String name : names){
-            JButton button = new CustomButton(name, 1.5);
+            JButton button = new CustomButton(name, 1.2);
             button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getPreferredSize().height));
             add(button);
             buttons.add(button);
         }
     }
     
-    private static ArrayList<JButton> buttons = new ArrayList<JButton>();
+    private final ArrayList<JButton> buttons = new ArrayList<>();
+    
+    public int getLastItemIndex(){
+        return buttons.size()-1;
+    }
     
     public JButton getButtonAt(int x){
+//        System.out.println(buttons.indexOf(x) + " is " +buttons.get(x).getText());
         return buttons.get(x);
+    }
+    
+    public JButton getButtonByName(String name){
+        for (JButton b : buttons){
+            if (b.getText().equals(name)) return b;
+        }
+        
+        return null;
     }
 }
