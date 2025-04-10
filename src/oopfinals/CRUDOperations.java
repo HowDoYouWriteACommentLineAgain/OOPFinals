@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import oopfinals.components.CustomFrame;
 import javax.swing.table.DefaultTableModel;
 import oopfinals.components.ButtonPanel;
+import oopfinals.components.InputPanels;
 
 /**
  *
@@ -21,25 +22,26 @@ public class CRUDOperations extends CustomFrame{
     public CRUDOperations(String text, String CRUDOper ,CustomFrame prevFrame) {
         super(text);
         
-        actionPanel = new ButtonPanel(CRUDOper, "Reset", "Go back");
+        ButtonPanel actionPanel = new ButtonPanel(CRUDOper, "Reset", "Go back");
+        InputPanels inputs = new InputPanels("Period", "Day", "Subject");
         
-        String[] columns = {"Period", "Monday", "Tuesday", "Wednesday", "Thursday", "Saturday", "Sunday"};
+        String[] columns = {"Patient Name", "Triage", "Insurance Coverage", "Room No:", "Doctor Assigned"};
         Object[][] data = {
-            {"08:30-11:00 AM", null, null, null, null, null,"OOP", null},
-            {"11:00-01:30 PM", null, null, null, null, null,"EDM", null},
-            {"01:30-04:00 PM", null, null, null, null, null,null, null},
-            {"04:00-06:30 PM", null, null, null, null, null,"Ethics", null},
-            {"04:00-06:30 PM", null, null, null, null, null,null, null},
+            {"Juan Dela Cruz", "Non-Urgent", "Phil Health", 101, "Dr. Juana Cruz"},
+            {"Luigi Mario", "Critical", "United Health Care", 102, "Dr. Grey Anatovich"},
+            {"Phil Swift", "Priority", "Phil Health", 204, "Dr Ezio Auditore"},
+            {"John Doe", "Non-Urgent", null, 308, "Dr Nathan Drake"},
         };
         
         DefaultTableModel model = new DefaultTableModel(data,columns);
         JTable table = new JTable(model);
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table.setRowHeight(60);
+        
         JScrollPane scrollPane = new JScrollPane(table);
         
-        
-        
-        add(scrollPane);
+        addTablePane(scrollPane);
+        addWest(inputs);
         addSouth(actionPanel);
         
         setVisible(false);
@@ -51,13 +53,8 @@ public class CRUDOperations extends CustomFrame{
         
     }
 
-        private final ButtonPanel actionPanel;
         
-//        private String CRUDOper;
-//        
-//        public String setCrudOper(String CrudOper){
-//            return CRUDOper = CrudOper;
-//        }
+        
 
     
 }

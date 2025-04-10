@@ -33,9 +33,8 @@ public class OOPFinals {
         landingFrame.addCenterImage(ImageUtils.rescale(icon, 100, 100));
         landingFrame.addSouth(crudMenu);
         
-        loginFrame.setVisible(true); //initial frame that is set be visible
-        
-        landingFrame.setVisible(false);
+        loginFrame.setVisible(false); //change these two before passing
+        landingFrame.setVisible(true);
         
         //TODO ADD MORE FRAMES
         

@@ -16,6 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import oopfinals.components.ButtonPanel;
+
 /**
  *
  * @author Admin
@@ -28,13 +30,13 @@ public class LoginFrame extends CustomFrame{
     private final JLabel usernameLabel = new JLabel("Username: ");
     private final JLabel passwordLabel = new JLabel("Password: ");
 
-    private final JLabel messageLabel = new JLabel("*Populate all fields cannot be empty");
+    private final JLabel messageLabel = new JLabel("*Username or password cannot be empty");
     
     private final JPanel loginPanel = new JPanel();
     private final ButtonPanel actionsPanel = new ButtonPanel("Login", "Reset");
     
-    private final String hardUsername = "";
-    private final String hardPasswordString = "";
+    private final String hardUsername = "k";
+    private final String hardPasswordString = "k";
     private final char[] hardPasswordChar = hardPasswordString.toCharArray();
     
     public LoginFrame(String text, JFrame nextFrame) {
