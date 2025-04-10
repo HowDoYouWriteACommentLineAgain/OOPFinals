@@ -34,6 +34,10 @@ public class ButtonPanel extends JPanel{
         return buttons.size()-1;
     }
     
+    public JButton selectLastButton(){
+        return buttons.get(getLastItemIndex());
+    }
+    
     public JButton getButtonAt(int x){
 //        System.out.println(buttons.indexOf(x) + " is " +buttons.get(x).getText());
         return buttons.get(x);

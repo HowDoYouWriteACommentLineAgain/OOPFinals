@@ -14,11 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import oopfinals.components.ButtonPanel;
-
 /**
  *
  * @author Admin
@@ -31,13 +28,13 @@ public class LoginFrame extends CustomFrame{
     private final JLabel usernameLabel = new JLabel("Username: ");
     private final JLabel passwordLabel = new JLabel("Password: ");
 
-    private final JLabel messageLabel = new JLabel("*Username or password cannot be empty");
+    private final JLabel messageLabel = new JLabel("*Populate all fields cannot be empty");
     
     private final JPanel loginPanel = new JPanel();
     private final ButtonPanel actionsPanel = new ButtonPanel("Login", "Reset");
     
-    private final String hardUsername = "krystian";
-    private final String hardPasswordString = "FearTheOldBlood";
+    private final String hardUsername = "";
+    private final String hardPasswordString = "";
     private final char[] hardPasswordChar = hardPasswordString.toCharArray();
     
     public LoginFrame(String text, JFrame nextFrame) {
@@ -76,8 +73,8 @@ public class LoginFrame extends CustomFrame{
         
         actionsPanel.getButtonAt(0).addActionListener(e->{
             messageLabel.setVisible(false);
-            usernameField.setBorder(new LineBorder(null, 0));
-            passwordField.setBorder(new LineBorder(null, 0));
+            usernameField.setBorder(new LineBorder(null, 1));
+            passwordField.setBorder(new LineBorder(null, 1));
             
             if(usernameField.getText().toLowerCase().trim().isEmpty() || passwordField.getPassword().length == 0){
                 usernameField.setBorder(new LineBorder(Color.red, 1));
@@ -91,16 +88,17 @@ public class LoginFrame extends CustomFrame{
             passwordField.setText("");
             
             final boolean usernameMatched = usernameInput.equals(hardUsername);
-            boolean passwordMatched = false;
+            boolean passwordMatched = Arrays.equals(passwordInput, hardPasswordChar);
             
-            if(passwordInput.length != hardPasswordChar.length){
+            
+            if(passwordInput.length != hardPasswordChar.length || usernameMatched == false || passwordMatched == false){
                 usernameField.setBorder(new LineBorder(Color.red, 1));
                 passwordField.setBorder(new LineBorder(Color.red, 1));
                 JOptionPane.showMessageDialog(null, "Invalid Username or Password try again.", "Error",JOptionPane.ERROR_MESSAGE);
                 Arrays.fill(passwordInput, '0');                
                 return;
                 
-            }else if(Arrays.equals(passwordInput, hardPasswordChar)){
+            }else if((passwordMatched && usernameMatched)){
                 
                 
                 Arrays.fill(passwordInput, '0');
@@ -110,6 +108,13 @@ public class LoginFrame extends CustomFrame{
                 return;
             }
 
+        });
+        
+        actionsPanel.getButtonByName("Reset").addActionListener(e->{
+            usernameField.setBorder(new LineBorder(null, 1));
+            passwordField.setBorder(new LineBorder(null, 1));
+            usernameField.setText("");
+            passwordField.setText("");
         });
         
     }

@@ -40,6 +40,10 @@ public class CustomFrame extends JFrame{
         add(labelImg, BorderLayout.CENTER);
     }
     
+    public void addNorth(JPanel panel){
+        add(panel, BorderLayout.NORTH);
+    }
+    
     public void addSouth(JPanel panel){
         add(panel, BorderLayout.SOUTH);
     }

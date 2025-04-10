@@ -22,7 +22,9 @@ public class OOPFinals {
     private static ImageIcon icon = new ImageIcon(OOPFinals.class.getResource("/resources/Icon.png"));
     
     private static final CustomFrame landingFrame = new CustomFrame("Welcome");
-    private static final LoginFrame loginFrame = new LoginFrame("Login", landingFrame);
+    private static final LoginFrame loginFrame = new LoginFrame("Login",landingFrame);
+    
+    private static final CRUDOperations createFrame = new CRUDOperations("Add Event", "Add Event", landingFrame);
     
     public static void main(String[] args) {
 
@@ -48,6 +50,11 @@ public class OOPFinals {
         
         crudMenu.getButtonByName("Go Back").addActionListener(e->{
             loginFrame.setVisible(true);
+            landingFrame.setVisible(false);
+        });
+        
+        crudMenu.getButtonAt(0).addActionListener(e->{
+            createFrame.setVisible(true);
             landingFrame.setVisible(false);
         });
     }
