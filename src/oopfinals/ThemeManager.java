@@ -24,18 +24,28 @@ public class ThemeManager {
     public static void setGlobalFont(){
         
         try {
-            Font noto = Font.createFont(Font.TRUETYPE_FONT,
-                    ThemeManager.class.getResourceAsStream("/resources/NotoSans-VariableFont_wdth,wght.ttf"))
-                    .deriveFont(14f);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(noto);
             
-            UIManager.put("Table.font", noto);
-            UIManager.put("TextField.font", noto);
+            String[] fontNames = ge.getAvailableFontFamilyNames();
+            
+            Font font = Font.createFont(Font.TRUETYPE_FONT,
+                    ThemeManager.class.getResourceAsStream("/resources/DejaVuSans.ttf"))
+//                    ThemeManager.class.getResourceAsStream("/resources/DroidSans.ttf"))
+                    .deriveFont(14f);
+            
+            UIManager.put("Table.font", font);
+            UIManager.put("TextField.font", font);
+
+            System.out.println("Using: " + font.getName());
+
             
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+
+//            Font noto = Font.createFont(Font.TRUETYPE_FONT,
+//                    ThemeManager.class.getResourceAsStream("/resources/NotoSans-VariableFont_wdth,wght.ttf"))
+//                    .deriveFont(14f);

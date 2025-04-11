@@ -61,7 +61,7 @@ public class InputPanels extends JPanel{
             inputRow.add(tf);
             
 //            l.setBorder(new LineBorder(Color.red,1));            
-            inputRow.setBorder(new LineBorder(Color.red,1));
+//            inputRow.setBorder(new LineBorder(Color.red,1));
 
             
             ALlabels.add(l);
@@ -87,6 +87,8 @@ public class InputPanels extends JPanel{
         
         return null;
     }
+    
+    
     
     public void setInvalidValidation(){
         for(JTextField t : ALinputs){
@@ -115,5 +117,19 @@ public class InputPanels extends JPanel{
         JScrollPane scroll = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setPreferredSize(new Dimension(300,300));
         return scroll;
+    }
+
+    public boolean checkValidation(){
+        unsetInvalidValidation();
+        int numberOfBlanks = 0;
+        for(JTextField tf : ALinputs){
+            if(tf.getText().isBlank())
+            {
+                numberOfBlanks++;
+                tf.setBorder(new LineBorder(Color.red, 1));
+            }
+        }
+        
+        return (numberOfBlanks > 1) ? false: true;
     }
 }

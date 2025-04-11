@@ -5,11 +5,15 @@
 package oopfinals;
 
 import java.sql.*;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import oopfinals.components.CustomFrame;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import oopfinals.components.ButtonPanel;
 import oopfinals.components.InputPanels;
 
@@ -21,6 +25,7 @@ public class CRUDOperations extends CustomFrame{
     
     static{
         ThemeManager.setGlobalFont();
+
     };
 
     public CRUDOperations(String frameName, String CRUDOper ,CustomFrame prevFrame) {
@@ -29,23 +34,37 @@ public class CRUDOperations extends CustomFrame{
         ButtonPanel actionPanel = new ButtonPanel(CRUDOper, "Reset", "Go back");
         
         loadIntoTable();
-        table.getColumnModel().getColumn(0).setPreferredWidth(100);
+
         table.setRowHeight(60);
+        table.setRowSelectionAllowed(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        JTextField tf = new JTextField();
+        tf.setEditable(false);
+        tf.setFocusable(false);
+        DefaultCellEditor editor = new DefaultCellEditor(tf);
+        table.setDefaultEditor(Object.class, editor);
         
         JScrollPane scrollPane = new JScrollPane(table);
-        
         addTablePane(scrollPane);
-        System.out.println(CRUDOper);
+        
+        addSouth(actionPanel);
+        
+//        System.out.println(CRUDOper);
         switch (CRUDOper) {
             case "Add":
                 addWest(addInputPanel.getScrollablePanel());
                 break;
             case "Update":
+                actionPanel.getButtonByName("Reset").setVisible(false);
                 addWest(updateInputPanel.getScrollablePanel());
+                updateInputPanel.getTextFieldByName("ID").setEnabled(false);
                 break;
-            case "Delete":
-                addWest(deleteInputPanel.getScrollablePanel());
+             //                addWest(deleteInputPanel.getScrollablePanel());
             case "Read":
+                actionPanel.getButtonByName(CRUDOper).setVisible(false);
+            case "Delete":
+                actionPanel.getButtonByName("Reset").setVisible(false);
                 break;
             default:
                 throw new AssertionError();
@@ -53,7 +72,7 @@ public class CRUDOperations extends CustomFrame{
         
 
         
-        addSouth(actionPanel);
+        
         
         setVisible(false);
         
@@ -64,14 +83,24 @@ public class CRUDOperations extends CustomFrame{
         
         actionPanel.getButtonByName("Reset").addActionListener(e->{
             addInputPanel.clearAll();
+            updateInputPanel.clearAll();
         });
         
         actionPanel.getButtonByName(CRUDOper).addActionListener(e->{
-            addIntoTable();
-            addInputPanel.clearAll();
+            doCRUDOper(CRUDOper);
             loadIntoTable();
 
         });
+        
+        table.getSelectionModel().addListSelectionListener(e->{
+            if(CRUDOper == "Update"){
+                if (!e.getValueIsAdjusting()) {
+                    setUpdateInputPanelValues();
+                }
+            }
+            
+        });
+        
         
     }
     
@@ -88,9 +117,9 @@ public class CRUDOperations extends CustomFrame{
             "ID","Name", "Category", "Direction", "Status", "Region","Sample"
         );
     
-    private InputPanels deleteInputPanel = new InputPanels(
-            "ID"
-        );
+//    private InputPanels deleteInputPanel = new InputPanels(
+//            "ID"
+//        );
     
     public void loadIntoTable(){
         try(Connection conn = JDBCUtil.getConnection()){
@@ -125,7 +154,12 @@ public class CRUDOperations extends CustomFrame{
     private void addIntoTable(){
         try(Connection conn = JDBCUtil.getConnection()){
             String query = "Insert into alphabets_and_scripts (name, category, direction, status, region_of_origin, sample) VALUES (?,?,?,?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);         
+            
+            if(addInputPanel.checkValidation() == false){
+                JOptionPane.showMessageDialog(null, "Please populate all fields", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } 
             
             ps.setString(1, addInputPanel.getTextFieldByName("Name").getText());
             ps.setString(2, addInputPanel.getTextFieldByName("Category").getText());
@@ -136,6 +170,8 @@ public class CRUDOperations extends CustomFrame{
             
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Successfully added records","Success",JOptionPane.INFORMATION_MESSAGE);
+            addInputPanel.clearAll();
+
 
         }catch(Exception e){
             e.printStackTrace();
@@ -144,7 +180,124 @@ public class CRUDOperations extends CustomFrame{
         }
         
     }
+    
+    private void updateFromTable() {
+        try (Connection conn = JDBCUtil.getConnection()) {
+            String query = 
+                    "Update alphabets_and_scripts "
+                    + "SET name = ?,"
+                    + " category = ?,"
+                    + " direction = ?,"
+                    + " status = ?,"
+                    + " region_of_origin = ? ,"
+                    + " sample =? "
+                    + "WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            if (updateInputPanel.checkValidation() == false) {
+                JOptionPane.showMessageDialog(null, "Please populate all fields", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+
+            ps.setString(1, updateInputPanel.getTextFieldByName("Name").getText());
+            ps.setString(2, updateInputPanel.getTextFieldByName("Category").getText());
+            ps.setString(3, updateInputPanel.getTextFieldByName("Direction").getText());
+            ps.setString(4, updateInputPanel.getTextFieldByName("Status").getText());
+            ps.setString(5, updateInputPanel.getTextFieldByName("Region").getText());
+            ps.setString(6, updateInputPanel.getTextFieldByName("Sample").getText());
+            ps.setString(7, updateInputPanel.getTextFieldByName("ID").getText());
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Successfully Updated record", "Success", JOptionPane.INFORMATION_MESSAGE);
+            updateInputPanel.clearAll();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error in adding record", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+    
+    private void deleteFromTable(){
+        int selectedRowNum = table.getSelectedRow();
         
+        if(selectedRowNum == -1){
+            JOptionPane.showMessageDialog(null, "Please select a row to delete", "Error Selection", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        TableModel tableModel = table.getModel();
+        String rowId = String.valueOf(tableModel.getValueAt(selectedRowNum, 0));
+        String rowName = String.valueOf(tableModel.getValueAt(selectedRowNum, 1));
+        
+        int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete: " + rowName+"?");
+        
+        
+//        System.out.println(confirmation);
+        if(confirmation == JOptionPane.OK_OPTION)
+        {
+            try (Connection conn = JDBCUtil.getConnection()) {
+                String query = "DELETE from alphabets_and_scripts where id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setString(1, rowId);
+
+                ps.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error deleting", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        
+        
+    }
+    
+    private boolean setUpdateInputPanelValues(){
+        int selectedRowNum = table.getSelectedRow();
+        if (selectedRowNum == -1) {
+            return false;
+        }
+
+        TableModel tableModel = table.getModel();
+        String ID = String.valueOf(tableModel.getValueAt(selectedRowNum, 0));
+        String Name = String.valueOf(tableModel.getValueAt(selectedRowNum, 1));
+        String Category = String.valueOf(tableModel.getValueAt(selectedRowNum, 2));
+        String Direction = String.valueOf(tableModel.getValueAt(selectedRowNum, 3));
+        String Status = String.valueOf(tableModel.getValueAt(selectedRowNum, 4));
+        String Region = String.valueOf(tableModel.getValueAt(selectedRowNum, 5));
+        String Sample = String.valueOf(tableModel.getValueAt(selectedRowNum, 6));
+        
+        
+        updateInputPanel.getTextFieldByName("ID").setText(ID);
+        updateInputPanel.getTextFieldByName("Name").setText(Name);
+        updateInputPanel.getTextFieldByName("Category").setText(Category);
+        updateInputPanel.getTextFieldByName("Direction").setText(Direction);
+        updateInputPanel.getTextFieldByName("Status").setText(Status);
+        updateInputPanel.getTextFieldByName("Region").setText(Region);
+        updateInputPanel.getTextFieldByName("Sample").setText(Sample);
+        
+        return true;
+    }
+    
+    private void doCRUDOper(String CRUDOper){
+        switch (CRUDOper) {
+            case "Add":
+                addIntoTable();
+                break;
+            case "Delete":
+                deleteFromTable();
+                break;
+            case "Update":
+                updateFromTable();
+            case "Read":
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
 }
 
 
