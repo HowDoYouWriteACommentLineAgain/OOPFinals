@@ -4,6 +4,7 @@
  */
 package oopfinals;
 
+import java.awt.Font;
 import oopfinals.components.LoginFrame;
 import oopfinals.components.CustomFrame;
 import oopfinals.components.ButtonPanel;
@@ -19,18 +20,24 @@ public class OOPFinals {
      * @param args the command line arguments
      */
     
-    private static ImageIcon icon = new ImageIcon(OOPFinals.class.getResource("/resources/Icon.png"));
+    private static ImageIcon icon = new ImageIcon(OOPFinals.class.getResource("/resources/Background.png"));
     
     private static final CustomFrame landingFrame = new CustomFrame("Welcome");
     private static final LoginFrame loginFrame = new LoginFrame("Login",landingFrame);
     
-    private static final CRUDOperations createFrame = new CRUDOperations("Add Event", "Add Event", landingFrame);
+    private static final CRUDOperations createFrame = new CRUDOperations("Add Writing System", "Add", landingFrame);
+    private static final CRUDOperations readFrame = new CRUDOperations("Read Writing System", "Read", landingFrame);
+    private static final CRUDOperations updateFrame = new CRUDOperations("Update Writing System", "Update", landingFrame);
+    private static final CRUDOperations deleteFrame = new CRUDOperations("Delete Writing System", "Delete", landingFrame);
     
     public static void main(String[] args) {
-
-        ButtonPanel crudMenu = new ButtonPanel("Add Event", "View Events", "Update Event", "Delete Event", "Go Back");
         
-        landingFrame.addCenterImage(ImageUtils.rescale(icon, 100, 100));
+
+        ThemeManager.setGlobalLookAndFeel();
+
+        ButtonPanel crudMenu = new ButtonPanel("Create", "Read", "Update", "Delete", "Go Back");
+        
+        landingFrame.addCenterImage(ImageUtils.rescale(icon, (int)(1280*0.8), (int)(592*0.8)));
         landingFrame.addSouth(crudMenu);
         
         loginFrame.setVisible(false); //change these two before passing
@@ -48,13 +55,32 @@ public class OOPFinals {
         
         
         crudMenu.getButtonByName("Go Back").addActionListener(e->{
+            CustomFrame.setAllFramesToInvisible();
             loginFrame.setVisible(true);
-            landingFrame.setVisible(false);
         });
         
-        crudMenu.getButtonAt(0).addActionListener(e->{
+        crudMenu.getButtonByName("Create").addActionListener(e->{
+            CustomFrame.setAllFramesToInvisible();
             createFrame.setVisible(true);
-            landingFrame.setVisible(false);
+            createFrame.loadIntoTable();
+        });
+        
+        crudMenu.getButtonByName("Read").addActionListener(e->{
+            CustomFrame.setAllFramesToInvisible();
+            readFrame.setVisible(true);
+            readFrame.loadIntoTable();            
+        });
+        
+        crudMenu.getButtonByName("Update").addActionListener(e->{
+            CustomFrame.setAllFramesToInvisible();
+            updateFrame.setVisible(true);
+            updateFrame.loadIntoTable();
+        });
+        
+        crudMenu.getButtonByName("Delete").addActionListener(e->{
+            CustomFrame.setAllFramesToInvisible();
+            deleteFrame.setVisible(true);
+            deleteFrame.loadIntoTable();
         });
     }
     

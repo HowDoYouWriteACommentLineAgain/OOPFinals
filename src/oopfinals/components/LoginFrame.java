@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import oopfinals.ThemeManager;
 import oopfinals.components.ButtonPanel;
 
 /**
@@ -35,12 +36,14 @@ public class LoginFrame extends CustomFrame{
     private final JPanel loginPanel = new JPanel();
     private final ButtonPanel actionsPanel = new ButtonPanel("Login", "Reset");
     
-    private final String hardUsername = "k";
-    private final String hardPasswordString = "k";
+    private final String hardUsername = "LanguageNerd";
+    private final String hardPasswordString = "Linguistics1";
     private final char[] hardPasswordChar = hardPasswordString.toCharArray();
     
     public LoginFrame(String text, JFrame nextFrame) {
         super(text, 600, 300);
+                
+        ThemeManager.setGlobalLookAndFeel();
         
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
@@ -82,6 +85,8 @@ public class LoginFrame extends CustomFrame{
                 usernameField.setBorder(new LineBorder(Color.red, 1));
                 passwordField.setBorder(new LineBorder(Color.red, 1));
                 messageLabel.setVisible(true);
+                
+                return;
             }
             
             final String usernameInput = usernameField.getText();

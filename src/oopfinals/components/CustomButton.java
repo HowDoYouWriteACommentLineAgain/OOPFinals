@@ -6,6 +6,7 @@ package oopfinals.components;
 
 import java.awt.Dimension;
 import javax.swing.JButton;
+import oopfinals.ThemeManager;
 
 /**
  *
@@ -16,11 +17,14 @@ public class CustomButton extends JButton {
     
     public CustomButton(String text){
         super(text);
+        ThemeManager.setGlobalLookAndFeel();
+        setName(text);
         setPreferredSize(defaultSize);
     }
     
     public CustomButton(String text, double scale){
         super(text);
+        setName(text);
         setPreferredSize(scaleDefault(scale));
     }
     

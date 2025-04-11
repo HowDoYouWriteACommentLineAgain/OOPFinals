@@ -45,7 +45,7 @@ public class ButtonPanel extends JPanel{
     
     public JButton getButtonByName(String name){
         for (JButton b : buttons){
-            if (b.getText().equals(name)) return b;
+            if (b.getName().equals(name)) return b;
         }
         
         return null;

@@ -11,53 +11,63 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import oopfinals.ThemeManager;
 
 /**
  *
  * @author Admin
  */
 public class InputPanels extends JPanel{
+    static{
+        ThemeManager.setGlobalFont();
+    }
 
     public InputPanels(String... inputs) {
         super();
+        ThemeManager.setGlobalLookAndFeel();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(LEFT_ALIGNMENT);
-        setBorder(new EmptyBorder(10, 30, 10, 30));
-        setPreferredSize(new Dimension(280, 200));
+        setBorder(new EmptyBorder(10, 10, 10, 10));
+        setPreferredSize(new Dimension(200, 600));
         
         
         for (String i : inputs){
             final JLabel l = new JLabel(i+": ");
             final JTextField tf = new JTextField();
+            tf.setName(i);
             
             l.setHorizontalAlignment(JLabel.LEFT);
-            l.setMinimumSize(new Dimension(60, 40));
-            l.setPreferredSize(new Dimension(60, 40));
-            l.setMaximumSize(new Dimension(200, 40));
-            l.setBorder(new LineBorder(Color.red,1));
+            l.setMinimumSize(new Dimension(60, 20));
+            l.setPreferredSize(new Dimension(60, 30));
+            l.setMaximumSize(new Dimension(200, 30));
+
             
-            tf.setMinimumSize(new Dimension(600, 40));
-            l.setPreferredSize(new Dimension(800, 40));
-            tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+            tf.setMinimumSize(new Dimension(600, 20));
+            tf.setPreferredSize(new Dimension(300, 30));
+            tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
             
             JPanel inputRow = new JPanel();
+            inputRow.setMinimumSize(new Dimension(300, 40));
+            inputRow.setPreferredSize(new Dimension(300, 65));
+            inputRow.setMaximumSize(new Dimension(300, 80));
             inputRow.setLayout(new BoxLayout(inputRow, BoxLayout.X_AXIS));
             inputRow.setAlignmentX(LEFT_ALIGNMENT);
             inputRow.add(l);
             inputRow.add(Box.createRigidArea(new Dimension(10, 0))); // spacer
             inputRow.add(tf);
             
+//            l.setBorder(new LineBorder(Color.red,1));            
             inputRow.setBorder(new LineBorder(Color.red,1));
 
             
             ALlabels.add(l);
             ALinputs.add(tf);
             add(inputRow);
-            inputRow.add(Box.createRigidArea(new Dimension(0, 100))); // spacer
+            inputRow.add(Box.createRigidArea(new Dimension(0, 40))); // spacer
 
         }
         
@@ -72,7 +82,7 @@ public class InputPanels extends JPanel{
     
     public JTextField getTextFieldByName(String name){
         for (JTextField t : ALinputs){
-            if(t.getText().equals(name)) return t; 
+            if(t.getName().equals(name)) return t; 
         }
         
         return null;
@@ -92,5 +102,18 @@ public class InputPanels extends JPanel{
         }
 
         ALlabels.get(ALlabels.size() - 1).setVisible(false);
+    }
+    
+    public void clearAll(){
+        for (JTextField t: ALinputs){
+            t.setText("");
+            unsetInvalidValidation();
+        }
+    }
+    
+    public JScrollPane getScrollablePanel(){
+        JScrollPane scroll = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setPreferredSize(new Dimension(300,300));
+        return scroll;
     }
 }
