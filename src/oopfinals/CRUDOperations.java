@@ -199,6 +199,8 @@ public class CRUDOperations extends CustomFrame{
                 return;
             }
             
+            System.out.println(updateInputPanel.checkValidation() == false);
+            
 
             ps.setString(1, updateInputPanel.getTextFieldByName("Name").getText());
             ps.setString(2, updateInputPanel.getTextFieldByName("Category").getText());
@@ -292,6 +294,7 @@ public class CRUDOperations extends CustomFrame{
                 break;
             case "Update":
                 updateFromTable();
+                break;
             case "Read":
                 break;
             default:

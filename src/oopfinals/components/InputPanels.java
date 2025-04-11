@@ -130,6 +130,6 @@ public class InputPanels extends JPanel{
             }
         }
         
-        return (numberOfBlanks > 1) ? false: true;
+        return (numberOfBlanks == 0) ? true : false;
     }
 }
